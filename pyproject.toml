@@ -13,3 +13,8 @@ dependencies = [
     "sqlalchemy[asyncio]>=2.0.49",
     "uuid6>=2025.0.1",
 ]
+
+[tool.ruff]
+# 기본 라인 길이 설정
+line-length = 120
+target-version = "py312"
