@@ -10,6 +10,7 @@ from app.core.db.models import TimestampMixin
 if TYPE_CHECKING:
     from app.models.patients import Patient
     from app.models.users import User
+    from app.models.ai_analysis_results import AIAnalysis
 
 
 class MedicalRecord(Base, TimestampMixin):
@@ -23,7 +24,13 @@ class MedicalRecord(Base, TimestampMixin):
     # patient 객체 참조 관계 설정
     patient: Mapped["Patient"] = relationship(back_populates="medical_records")
     # xray_image 객체 역참조관계 설정
-    xray_images: Mapped[list["XrayImage"]] = relationship(back_populates="medical_record", passive_deletes=True)
+    xray_images: Mapped[list["XrayImage"]] = relationship(
+        back_populates="medical_record", cascade="all, delete-orphan", passive_deletes=True
+    )
+    # ai_analysis_results 객체에 대해서 역참조관계 설정
+    ai_analyses: Mapped[list["AIAnalysis"]] = relationship(
+        back_populates="medical_record", cascade="all, delete-orphan", passive_deletes=True
+    )
 
 
 class XrayImage(Base, TimestampMixin):
@@ -32,10 +39,7 @@ class XrayImage(Base, TimestampMixin):
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     record_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("medical_records.id", ondelete="CASCADE"), index=True)
     uploader_id: Mapped[int | None] = mapped_column(
-        BigInteger,
-        ForeignKey("users.id", ondelete="SET NULL"),
-        index=True,
-        nullable=True,
+        BigInteger, ForeignKey("users.id", ondelete="SET NULL"), index=True, nullable=True
     )
     image_url: Mapped[str] = mapped_column(String(2048))
 
