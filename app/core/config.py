@@ -8,10 +8,7 @@ class Settings(BaseSettings):
     DB_PORT: str = "3306"
     DB_NAME: str = "ai_health"
 
-    model_config = {
-        "env_file": ".env",
-        "extra": "ignore"
-    }
+    model_config = {"env_file": ".env", "extra": "ignore"}
 
 
 settings = Settings()
