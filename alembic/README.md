@@ -12,9 +12,9 @@
   from sqlalchemy import String
   from sqlalchemy.orm import Mapped, mapped_column
   from app.core.db.databases import Base
-  from app.core.db.models import UUIDMixin, TimestampMixin
+  from app.core.db.models import TimestampMixin
 
-  class User(Base, UUIDMixin, TimestampMixin):
+  class User(Base, TimestampMixin):
       __tablename__ = "users"
       username: Mapped[str] = mapped_column(String(50), unique=True, index=True)
       email: Mapped[str] = mapped_column(String(255), unique=True, index=True)
