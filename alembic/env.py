@@ -15,7 +15,7 @@ sys.path.append(os.getcwd())
 from app.core.db.databases import Base, DATABASE_URL
 
 # Model Import
-from app.models import *  # noqa: F403
+from app.models import *  # noqa: F401, F403
 
 # Alembic Config object
 config = context.config
