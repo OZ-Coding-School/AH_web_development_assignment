@@ -9,12 +9,13 @@ from alembic import context
 # 프로젝트 루트를 sys.path에 추가하여 app 모듈을 임포트할 수 있게 함
 import os
 import sys
+
 sys.path.append(os.getcwd())
 
 from app.core.db.databases import Base, DATABASE_URL
 
 # Model Import
-from app import models
+from app.models import *  # noqa: F403
 
 # Alembic Config object
 config = context.config

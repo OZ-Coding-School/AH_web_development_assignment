@@ -18,7 +18,10 @@ class TimestampMixin:
         DateTime, default=datetime.now(UTC), server_default=text("current_timestamp(0)")
     )
     updated_at: Mapped[datetime | None] = mapped_column(
-        DateTime, nullable=True, onupdate=datetime.now(UTC), server_default=text("current_timestamp(0)")
+        DateTime,
+        nullable=True,
+        onupdate=datetime.now(UTC),
+        server_default=text("current_timestamp(0)"),
     )
 
 
