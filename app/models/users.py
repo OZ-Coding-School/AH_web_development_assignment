@@ -23,4 +23,4 @@ class User(Base, TimestampMixin):
     gender: Mapped[str] = mapped_column(Enum(Gender))
     is_active: Mapped[bool] = mapped_column(default=True)
     # 업로드 한 xray 이미지 객체 역참조 관계 설정
-    uploaded_xray_images: Mapped[list["XrayImage"]] = relationship(back_populates="uploader", passive_deletes=True)
+    uploaded_xray_images: Mapped[list["XrayImage"]] = relationship(back_populates="uploader")
