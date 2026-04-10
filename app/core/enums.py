@@ -2,7 +2,7 @@ from enum import StrEnum
 
 
 class UserRole(StrEnum):
-    USER = "user"
+    PENDING = "pending"
     STAFF = "staff"
     ADMIN = "admin"
 
@@ -10,3 +10,9 @@ class UserRole(StrEnum):
 class Gender(StrEnum):
     M = "male"
     F = "female"
+
+
+class Department(StrEnum):
+    DEV = "developer"  # 개발자
+    MEDICAL = "medical team"  # 의료진
+    RESEARCH = "researcher"  # 연구진
