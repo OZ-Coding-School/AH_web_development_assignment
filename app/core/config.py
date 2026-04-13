@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from pydantic_settings import BaseSettings
 
 
@@ -13,6 +15,8 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
+    MEDIA_DIR: Path = BASE_DIR / "media"
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 
