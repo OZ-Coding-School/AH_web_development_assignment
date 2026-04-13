@@ -110,7 +110,25 @@
     }
     ```
 
-### 4.3. 회원 탈퇴 (REQ-USER-008)
+### 4.3. 비밀번호 변경
+- **Endpoint**: `PATCH /api/v1/users/me/password`
+- **Description**: 현재 비밀번호를 확인한 후 새로운 비밀번호로 변경합니다.
+- **Header**: `Authorization: Bearer {access_token}`
+- **Request Body**
+
+    | 항목 | 타입 | 설명 | 필수여부 | 예시 |
+    | :--- | :--- | :--- | :--- | :--- |
+    | current_password | string | 현재 비밀번호 | Y | oldpassword123! |
+    | new_password | string | 새 비밀번호 | Y | newpassword456! |
+
+- **Response (200 OK)**
+    ```json
+    {
+      "message": "비밀번호가 변경되었습니다."
+    }
+    ```
+
+### 4.4. 회원 탈퇴 (REQ-USER-008)
 - **Endpoint**: `DELETE /api/v1/users/me`
 - **Description**: 회원 탈퇴를 진행하며, DB에서 모든 정보를 즉시 삭제합니다.
 - **Header**: `Authorization: Bearer {access_token}`

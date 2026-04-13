@@ -2,7 +2,7 @@ from typing import Optional, Sequence
 from fastapi import HTTPException, status
 from app.models.users import User
 from app.repositories.user_repository import UserRepository
-from app.schemas.users import UserCreate, UserUpdate, UserLogin, AdminUserRoleUpdate
+from app.schemas.users import UserCreate, UserUpdate, UserLogin, PasswordUpdate, AdminUserRoleUpdate
 from app.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token
 from app.core.enums import Department, UserRole
 
@@ -77,3 +77,15 @@ class UserService:
 
         user.role = role_update.new_role
         return await self.user_repo.update(user)
+
+    async def update_password(self, user_id: int, password_update: PasswordUpdate) -> None:
+        user = await self.user_repo.get_by_id(user_id)
+        if not user:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="해당 사용자를 찾을 수 없습니다.")
+
+        if verify_password(password_update.current_password, user.hashed_passwords):
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="현재 비밀번호가 일치하지 않습니다.")
+
+        hashed_password = get_password_hash(password_update.new_password)
+        user.password = hashed_password
+        await self.user_repo.update(user)
