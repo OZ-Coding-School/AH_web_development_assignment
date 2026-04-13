@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.users import UserCreate, UserLogin, Token, UserRead, UserUpdate, Message
+from app.schemas.users import UserCreate, UserLogin, Token, UserRead, UserUpdate, PasswordUpdate, Message
 from app.services.user_service import UserService
 from app.apis.deps import get_user_service, get_current_user
 from app.models.users import User
@@ -44,6 +44,16 @@ async def update_me(
 ):
     await user_service.update_me(current_user.id, user_update)
     return {"message": "회원 정보가 수정되었습니다."}
+
+
+@router.patch("/me/password", response_model=Message)
+async def update_password(
+    password_update: PasswordUpdate,
+    current_user: User = Depends(get_current_user),
+    user_service: UserService = Depends(get_user_service),
+):
+    await user_service.update_password(current_user.id, password_update)
+    return {"message": "비밀번호가 변경되었습니다."}
 
 
 @router.delete("/me", status_code=status.HTTP_204_NO_CONTENT)

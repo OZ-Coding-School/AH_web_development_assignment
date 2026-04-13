@@ -39,6 +39,11 @@ class UserUpdate(BaseModel):
     phone_number: Optional[str] = None
 
 
+class PasswordUpdate(BaseModel):
+    current_password: str
+    new_password: str
+
+
 class AdminUserRead(UserRead):
     is_active: bool
 
