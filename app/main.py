@@ -7,6 +7,8 @@ from starlette.responses import FileResponse
 from app.apis.practice_apis import practice_router
 from app.apis.users import router as user_router
 from app.apis.admin import router as admin_router
+from app.apis.patients import router as patient_router
+from app.apis.medical_records import router as medical_record_router
 
 app = FastAPI()
 
@@ -19,6 +21,8 @@ app.mount("/media", StaticFiles(directory=BASE_DIR / "media"), name="media")
 app.include_router(practice_router)
 app.include_router(user_router, prefix="/api/v1")
 app.include_router(admin_router, prefix="/api/v1")
+app.include_router(patient_router, prefix="/api/v1")
+app.include_router(medical_record_router, prefix="/api/v1")
 
 
 @app.get(path="/healthcheck", status_code=200, include_in_schema=False)
@@ -34,11 +38,7 @@ async def index():
 @app.get("/{path:path}", include_in_schema=False)
 async def catch_all(path: str):
     # API나 정적 파일 경로는 제외 (FastAPI가 먼저 매칭하지 못한 경우에만 실행됨)
-    if (
-        path.startswith("api/v1")
-        or path.startswith("static/")
-        or path.startswith("media/")
-    ):
+    if path.startswith("api/v1") or path.startswith("static/") or path.startswith("media/"):
         from fastapi import HTTPException
 
         raise HTTPException(status_code=404)

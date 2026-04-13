@@ -6,7 +6,11 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.core.db.databases import async_get_db
 from app.core.security import decode_token
 from app.repositories.user_repository import UserRepository
+from app.repositories.patient_repository import PatientRepository
+from app.repositories.medical_record_repository import MedicalRecordRepository
 from app.services.user_service import UserService
+from app.services.patient_service import PatientService
+from app.services.medical_record_service import MedicalRecordService
 from app.models.users import User
 from app.core.enums import UserRole
 
@@ -16,6 +20,17 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/users/login")
 async def get_user_service(db: AsyncSession = Depends(async_get_db)) -> UserService:
     user_repo = UserRepository(db)
     return UserService(user_repo)
+
+
+async def get_patient_service(db: AsyncSession = Depends(async_get_db)) -> PatientService:
+    patient_repo = PatientRepository(db)
+    return PatientService(patient_repo)
+
+
+async def get_medical_record_service(db: AsyncSession = Depends(async_get_db)) -> MedicalRecordService:
+    medical_record_repo = MedicalRecordRepository(db)
+    patient_repo = PatientRepository(db)
+    return MedicalRecordService(medical_record_repo, patient_repo)
 
 
 async def get_current_user(
