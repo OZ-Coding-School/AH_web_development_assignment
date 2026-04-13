@@ -17,7 +17,7 @@ class MedicalRecord(Base, TimestampMixin):
     __tablename__ = "medical_records"
 
     id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
-    patient_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("patients.id", ondelete="RESTRICT"), index=True)
+    patient_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("patients.id", ondelete="CASCADE"), index=True)
     chart_number: Mapped[str] = mapped_column(String(50), unique=True)
     symptoms: Mapped[str] = mapped_column(Text)
 
