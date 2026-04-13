@@ -21,4 +21,6 @@ class Patient(Base, TimestampMixin):
     gender: Mapped[str] = mapped_column(Enum(Gender))
     phone_number: Mapped[str] = mapped_column(String(11))
     # 진료 기록 역참조 설정
-    medical_records: Mapped[list["MedicalRecord"]] = relationship(back_populates="patient")
+    medical_records: Mapped[list["MedicalRecord"]] = relationship(
+        back_populates="patient", cascade="all, delete-orphan", passive_deletes=True
+    )

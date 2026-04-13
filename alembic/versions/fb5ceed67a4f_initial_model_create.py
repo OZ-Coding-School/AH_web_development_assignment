@@ -1,8 +1,8 @@
-"""create initial models
+"""initial_model_create
 
-Revision ID: 7710376f1f2f
+Revision ID: fb5ceed67a4f
 Revises: 
-Create Date: 2026-04-10 10:26:22.773705
+Create Date: 2026-04-13 14:52:33.187804
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = '7710376f1f2f'
+revision: str = 'fb5ceed67a4f'
 down_revision: Union[str, Sequence[str], None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -54,7 +54,7 @@ def upgrade() -> None:
     sa.Column('symptoms', sa.Text(), nullable=False),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=False),
     sa.Column('updated_at', sa.DateTime(), server_default=sa.text('current_timestamp(0)'), nullable=True),
-    sa.ForeignKeyConstraint(['patient_id'], ['patients.id'], ondelete='RESTRICT'),
+    sa.ForeignKeyConstraint(['patient_id'], ['patients.id'], ondelete='CASCADE'),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('chart_number')
     )
