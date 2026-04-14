@@ -8,9 +8,11 @@ from app.core.security import decode_token
 from app.repositories.user_repository import UserRepository
 from app.repositories.patient_repository import PatientRepository
 from app.repositories.medical_record_repository import MedicalRecordRepository
+from app.repositories.ai_analysis_repository import AIAnalysisRepository
 from app.services.user_service import UserService
 from app.services.patient_service import PatientService
 from app.services.medical_record_service import MedicalRecordService
+from app.services.ai_analysis_service import AIAnalysisService
 from app.models.users import User
 from app.core.enums import UserRole
 
@@ -31,6 +33,12 @@ async def get_medical_record_service(db: AsyncSession = Depends(async_get_db)) -
     medical_record_repo = MedicalRecordRepository(db)
     patient_repo = PatientRepository(db)
     return MedicalRecordService(medical_record_repo, patient_repo)
+
+
+async def get_ai_analysis_service(db: AsyncSession = Depends(async_get_db)) -> AIAnalysisService:
+    ai_analysis_repo = AIAnalysisRepository(db)
+    medical_record_repo = MedicalRecordRepository(db)
+    return AIAnalysisService(ai_analysis_repo, medical_record_repo)
 
 
 async def get_current_user(

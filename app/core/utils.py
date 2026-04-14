@@ -12,7 +12,6 @@ def validate_image_extension(filename: Optional[str]) -> str:
     Check if the file extension is allowed.
     Returns the extension if valid, otherwise raises HTTPException.
     """
-    print(filename)
     if not filename:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="파일명이 비어있습니다.")
 
