@@ -17,6 +17,7 @@ class Settings(BaseSettings):
 
     BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
     MEDIA_DIR: Path = BASE_DIR / "media"
+    PREDICT_MODEL: str = "pneumonia_model_v1"
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 
