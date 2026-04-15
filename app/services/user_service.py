@@ -68,7 +68,9 @@ class UserService:
             if user.phone_number != user_update.phone_number:
                 db_phone_user = await self.user_repo.get_by_phone_number(user_update.phone_number)
                 if db_phone_user:
-                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 등록된 휴대폰 번호입니다.")
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST, detail="이미 등록된 휴대폰 번호입니다."
+                    )
             user.phone_number = user_update.phone_number
 
         return await self.user_repo.update(user)
