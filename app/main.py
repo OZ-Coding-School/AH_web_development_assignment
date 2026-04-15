@@ -4,11 +4,14 @@ from fastapi import FastAPI
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
-from app.apis.practice_apis import practice_router
-from app.apis.users import router as user_router
-from app.apis.admin import router as admin_router
-from app.apis.patients import router as patient_router
-from app.apis.medical_records import router as medical_record_router
+from app.apis.routers import (
+    practice_router,
+    user_router,
+    admin_router,
+    patient_router,
+    medical_record_router,
+)
+
 
 app = FastAPI()
 
