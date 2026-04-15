@@ -70,7 +70,24 @@
     ]
     ```
 
-### 3.3. 환자 정보 수정 (REQ-PTNT-003)
+### 3.3. 환자 정보 상세 조회 (REQ-PTNT-003)
+- **Endpoint**: `GET /api/v1/patients/{patient_id}`
+- **Description**: 특정 환자의 상세 정보를 조회합니다.
+- **Header**: `Authorization: Bearer {access_token}` (개발진, 의료 실무진, 연구진 접근 가능)
+- **Response (200 OK)**
+    ```json
+    {
+      "id": 1,
+      "name": "홍길동",
+      "age": 45,
+      "gender": "M",
+      "phone_number": "01012345678",
+      "created_at": "2024-04-13T13:00:00",
+      "updated_at": "2024-04-13T13:00:00"
+    }
+    ```
+
+### 3.4. 환자 정보 수정 (REQ-PTNT-004)
 - **Endpoint**: `PATCH /api/v1/patients/{patient_id}`
 - **Description**: 특정 환자의 정보를 수정합니다. 이름과 연락처만 수정 가능합니다.
 - **Header**: `Authorization: Bearer {access_token}` (개발진, 의료 실무진, 연구진 접근 가능)
@@ -88,7 +105,7 @@
     }
     ```
 
-### 3.4. 환자 정보 삭제 (REQ-PTNT-004)
+### 3.5. 환자 정보 삭제 (REQ-PTNT-005)
 - **Endpoint**: `DELETE /api/v1/patients/{patient_id}`
 - **Description**: 특정 환자의 정보를 삭제합니다. 삭제 시 해당 환자와 관련된 진료기록 및 X-Ray 이미지도 함께 영구 삭제됩니다.
 - **Header**: `Authorization: Bearer {access_token}` (개발진, 의료 실무진, 연구진 접근 가능)

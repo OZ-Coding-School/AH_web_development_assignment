@@ -36,6 +36,16 @@ async def get_patients(
     return await patient_service.get_patients(name=name, gender=gender, min_age=min_age, max_age=max_age)
 
 
+@router.get("/{patient_id}", response_model=PatientRead)
+async def get_patient(
+    patient_id: int,
+    patient_service: PatientService = Depends(get_patient_service),
+    current_user: User = Depends(get_current_user),
+):
+    # REQ-PTNT-003: 로그인 된 사내 개발진, 의료 실무진, 연구진 접근 가능
+    return await patient_service.get_patient(patient_id)
+
+
 @router.patch("/{patient_id}", response_model=PatientMessage)
 async def update_patient(
     patient_id: int,
@@ -43,7 +53,7 @@ async def update_patient(
     patient_service: PatientService = Depends(get_patient_service),
     current_user: User = Depends(get_current_user),
 ):
-    # REQ-PTNT-003: 로그인 된 사내 개발진, 의료 실무진, 연구진 접근 가능
+    # REQ-PTNT-004: 로그인 된 사내 개발진, 의료 실무진, 연구진 접근 가능
     await patient_service.update_patient(patient_id, patient_update)
     return {"message": "환자 정보가 성공적으로 수정되었습니다."}
 
@@ -54,6 +64,6 @@ async def delete_patient(
     patient_service: PatientService = Depends(get_patient_service),
     current_user: User = Depends(get_current_user),
 ):
-    # REQ-PTNT-004: 로그인 된 사내 개발진, 의료 실무진, 연구진 접근 가능
+    # REQ-PTNT-005: 로그인 된 사내 개발진, 의료 실무진, 연구진 접근 가능
     await patient_service.delete_patient(patient_id)
     return None
