@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import uvicorn
 from starlette.staticfiles import StaticFiles
+from starlette.responses import FileResponse
 
 app = FastAPI()
 
@@ -12,6 +13,21 @@ app.mount("/media", StaticFiles(directory="media"), name="media")
 @app.get(path="/healthcheck", status_code=200, include_in_schema=False)
 async def healthcheck():
     return {"status": "ok"}
+
+
+@app.get("/", include_in_schema=False)
+async def index():
+    return FileResponse(APP_DIR / "static" / "index.html")
+
+
+@app.get("/{path:path}", include_in_schema=False)
+async def catch_all(path: str):
+    # API나 정적 파일 경로는 제외 (FastAPI가 먼저 매칭하지 못한 경우에만 실행됨)
+    if path.startswith("api/v1") or path.startswith("static/") or path.startswith("media/"):
+        from fastapi import HTTPException
+
+        raise HTTPException(status_code=404)
+    return FileResponse(APP_DIR / "static" / "index.html")
 
 
 if __name__ == "__main__":
