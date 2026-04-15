@@ -1,9 +1,19 @@
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, status, Response, Cookie, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
-from app.schemas.users import UserCreate, UserLogin, Token, UserRead, UserUpdate, PasswordUpdate, Message
+from app.schemas.users import (
+    UserCreate,
+    UserLogin,
+    Token,
+    UserRead,
+    UserUpdate,
+    PasswordUpdate,
+    Message,
+    AccessToken,
+)
 from app.services.user_service import UserService
 from app.apis.deps import get_user_service, get_current_user
 from app.models.users import User
+from app.core.config import settings
 
 router = APIRouter(prefix="/users", tags=["users"])
 
@@ -16,12 +26,38 @@ async def signup(user_create: UserCreate, user_service: UserService = Depends(ge
 
 @router.post("/login", response_model=Token)
 async def login(
+    response: Response,
     form_data: OAuth2PasswordRequestForm = Depends(),
     user_service: UserService = Depends(get_user_service),
 ):
     # form_data.username을 email로 사용하여 로그인 처리
     user_login = UserLogin(email=form_data.username, password=form_data.password)
-    return await user_service.login(user_login)
+    tokens = await user_service.login(user_login)
+
+    # 리프레시 토큰을 HTTP-only 쿠키로 설정
+    response.set_cookie(
+        key="refresh_token",
+        value=tokens["refresh_token"],
+        httponly=True,
+        max_age=settings.REFRESH_TOKEN_EXPIRE_DAYS * 24 * 60 * 60,
+        samesite="strict",
+    )
+
+    return {"access_token": tokens["access_token"], "token_type": "bearer"}
+
+
+@router.post("/refresh", response_model=AccessToken)
+async def refresh_token(
+    refresh_token: str = Cookie(None),
+    user_service: UserService = Depends(get_user_service),
+):
+    if not refresh_token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="리프레시 토큰이 필요합니다.",
+        )
+    access_token = await user_service.refresh_access_token(refresh_token)
+    return {"access_token": access_token, "token_type": "bearer"}
 
 
 @router.post("/logout", response_model=Message)
