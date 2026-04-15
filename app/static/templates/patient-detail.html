@@ -5,8 +5,8 @@
             <p id="patient-info" style="color: #666; margin-top: 0.5rem;"></p>
         </div>
         <div style="display: flex; gap: 0.5rem;">
-            <button onclick="openUpdateModal()" style="background-color: var(--secondary-color);">정보 수정</button>
-            <button onclick="confirmDeletePatient()" style="background-color: var(--danger-color);">삭제</button>
+            <button onclick="pages.openUpdateModal()" style="background-color: var(--secondary-color);">정보 수정</button>
+            <button onclick="pages.confirmDeletePatient()" style="background-color: var(--danger-color);">삭제</button>
         </div>
     </div>
 </div>
@@ -37,7 +37,7 @@
 <div id="update-modal" class="modal">
     <div class="modal-content">
         <h3>환자 정보 수정</h3>
-        <form onsubmit="handlePatientUpdate(event)" style="text-align: left;">
+        <form onsubmit="pages.handlePatientUpdate(event)" style="text-align: left;">
             <div style="display: flex; flex-direction: column; gap: 0.5rem;">
                 <label for="update-name">이름</label>
                 <input type="text" id="update-name" required>
@@ -47,7 +47,7 @@
                 <input type="tel" id="update-phone" required>
             </div>
             <div style="display: flex; gap: 0.5rem; margin-top: 1rem; justify-content: flex-end;">
-                <button type="button" class="secondary" onclick="closeUpdateModal()">취소</button>
+                <button type="button" class="secondary" onclick="pages.closeUpdateModal()">취소</button>
                 <button type="submit">수정 완료</button>
             </div>
         </form>
@@ -61,8 +61,8 @@
         <p>환자를 삭제하면 해당 환자의 <strong>모든 진료 기록 및 AI 분석 데이터가 영구적으로 삭제</strong>됩니다.</p>
         <p>정말로 삭제하시겠습니까?</p>
         <div style="display: flex; gap: 0.5rem; margin-top: 1.5rem; justify-content: flex-end;">
-            <button class="secondary" onclick="closeDeleteModal()">취소</button>
-            <button style="background-color: var(--danger-color);" onclick="handlePatientDelete()">확인했습니다.</button>
+            <button class="secondary" onclick="pages.closeDeleteModal()">취소</button>
+            <button style="background-color: var(--danger-color);" onclick="pages.handlePatientDelete()">확인했습니다.</button>
         </div>
     </div>
 </div>
