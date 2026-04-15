@@ -18,6 +18,10 @@ class UserRepository:
         result = await self.db.execute(select(User).where(User.email == email))
         return result.scalars().first()
 
+    async def get_by_phone_number(self, phone_number: str) -> Optional[User]:
+        result = await self.db.execute(select(User).where(User.phone_number == phone_number))
+        return result.scalars().first()
+
     async def create(self, user: User) -> User:
         self.db.add(user)
         await self.db.commit()

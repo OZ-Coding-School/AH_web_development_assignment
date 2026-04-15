@@ -16,6 +16,10 @@ class UserService:
         if db_user:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 등록된 이메일입니다.")
 
+        db_phone_user = await self.user_repo.get_by_phone_number(user_create.phone_number)
+        if db_phone_user:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 등록된 휴대폰 번호입니다.")
+
         hashed_password = get_password_hash(user_create.password)
         new_user = User(
             email=user_create.email,
@@ -55,6 +59,10 @@ class UserService:
         if user_update.department is not None:
             user.department = user_update.department
         if user_update.phone_number is not None:
+            if user.phone_number != user_update.phone_number:
+                db_phone_user = await self.user_repo.get_by_phone_number(user_update.phone_number)
+                if db_phone_user:
+                    raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="이미 등록된 휴대폰 번호입니다.")
             user.phone_number = user_update.phone_number
 
         return await self.user_repo.update(user)
@@ -83,7 +91,7 @@ class UserService:
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="해당 사용자를 찾을 수 없습니다.")
 
-        if verify_password(password_update.current_password, user.hashed_passwords):
+        if verify_password(password_update.current_password, user.hashed_password):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="현재 비밀번호가 일치하지 않습니다.")
 
         hashed_password = get_password_hash(password_update.new_password)
