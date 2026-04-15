@@ -19,7 +19,7 @@ class User(Base, TimestampMixin):
     name: Mapped[str] = mapped_column(String(30), index=True)
     department: Mapped[str] = mapped_column(Enum(Department))
     role: Mapped[UserRole] = mapped_column(Enum(UserRole), default=UserRole.PENDING)
-    phone_number: Mapped[str] = mapped_column(String(11))
+    phone_number: Mapped[str] = mapped_column(String(11), unique=True)
     gender: Mapped[str] = mapped_column(Enum(Gender))
     is_active: Mapped[bool] = mapped_column(default=True)
     # 업로드 한 xray 이미지 객체 역참조 관계 설정
