@@ -10,9 +10,7 @@ from app.repositories.medical_record_repository import MedicalRecordRepository
 from ai_models.model import PneumoniaPredictModel, logger
 
 
-MODEL_PATHS = {
-    "pneumonia_model_v1": "ai_models/pneumonia_model.pth"
-}
+MODEL_PATHS = {"pneumonia_model_v1": "ai_models/pneumonia_model.pth"}
 pneumonia_model = PneumoniaPredictModel(MODEL_PATHS.get(settings.PREDICT_MODEL, ""))
 
 try:
