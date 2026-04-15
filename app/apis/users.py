@@ -61,9 +61,8 @@ async def refresh_token(
 
 
 @router.post("/logout", response_model=Message)
-async def logout(current_user: User = Depends(get_current_user)):
-    # JWT 방식에서는 서버측 로그아웃 처리가 필수는 아니지만, 블랙리스트 등을 구현할 수 있습니다.
-    # 명세서에 따라 성공 메시지를 반환합니다.
+async def logout(response: Response, current_user: User = Depends(get_current_user)):
+    response.delete_cookie(key="refresh_token")
     return {"message": "성공적으로 로그아웃되었습니다."}
 
 
