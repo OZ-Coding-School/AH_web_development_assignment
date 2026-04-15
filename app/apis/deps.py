@@ -52,7 +52,16 @@ async def get_current_user(
     return user
 
 
-async def get_current_admin(current_user: User = Depends(get_current_user)) -> User:
+async def get_current_active_user(current_user: User = Depends(get_current_user)) -> User:
+    if current_user.role == UserRole.PENDING:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="승인 대기 중인 사용자입니다. 관리자의 승인이 필요합니다.",
+        )
+    return current_user
+
+
+async def get_current_admin(current_user: User = Depends(get_current_active_user)) -> User:
     if current_user.role != UserRole.ADMIN:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="관리자 권한이 필요합니다.")
     return current_user
