@@ -16,7 +16,7 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     password: str
 
-    @field_validator('password')
+    @field_validator("password")
     @classmethod
     def validate_password_format(cls, v: str) -> str:
         pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$"
@@ -57,7 +57,7 @@ class PasswordUpdate(BaseModel):
     current_password: str
     new_password: str
 
-    @field_validator('new_password')
+    @field_validator("new_password")
     @classmethod
     def validate_new_password_format(cls, v: str) -> str:
         pattern = r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?\":{}|<>]).{8,}$"
