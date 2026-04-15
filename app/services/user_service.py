@@ -91,7 +91,7 @@ class UserService:
         if not user:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="해당 사용자를 찾을 수 없습니다.")
 
-        if verify_password(password_update.current_password, user.hashed_password):
+        if not verify_password(password_update.current_password, user.hashed_password):
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="현재 비밀번호가 일치하지 않습니다.")
 
         user.hashed_password = get_password_hash(password_update.new_password)
