@@ -25,7 +25,16 @@ class MedicalRecordCreate(MedicalRecordBase):
 
 class MedicalRecordListRead(BaseModel):
     id: int
+    chart_number: str
+    symptoms: str
     created_at: datetime
+
+    @field_validator("symptoms")
+    @classmethod
+    def truncate_symptoms(cls, v: str) -> str:
+        if len(v) > 100:
+            return v[:100] + "..."
+        return v
 
     class Config:
         from_attributes = True
