@@ -41,7 +41,7 @@
     }
     ```
 
-### 3.2. 환자별 진료기록 목록 조회 (REQ-MDR-003)
+### 3.2. 환자별 진료기록 목록 조회 (REQ-MDR-002)
 - **Endpoint**: `GET /api/v1/patients/{patient_id}/medical-records`
 - **Description**: 특정 환자의 모든 진료기록 목록을 조회합니다.
 - **Header**: `Authorization: Bearer {access_token}` (개발진, 의료 실무진, 연구진 접근 가능)
@@ -63,7 +63,7 @@
     ]
     ```
 
-### 3.3. 진료기록 상세 조회 (REQ-MDR-004)
+### 3.3. 진료기록 상세 조회 (REQ-MDR-003)
 - **Endpoint**: `GET /api/v1/medical-records/{record_id}`
 - **Description**: 특정 진료기록의 상세 정보를 조회합니다.
 - **Header**: `Authorization: Bearer {access_token}` (개발진, 의료 실무진, 연구진 접근 가능)
