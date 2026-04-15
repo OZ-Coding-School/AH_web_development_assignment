@@ -3,7 +3,13 @@ from fastapi import HTTPException, status
 from app.models.users import User
 from app.repositories.user_repository import UserRepository
 from app.schemas.users import UserCreate, UserUpdate, UserLogin, PasswordUpdate, AdminUserRoleUpdate
-from app.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token
+from app.core.security import (
+    get_password_hash,
+    verify_password,
+    create_access_token,
+    create_refresh_token,
+    decode_token,
+)
 from app.core.enums import Department, UserRole
 
 
@@ -96,3 +102,21 @@ class UserService:
 
         user.hashed_password = get_password_hash(password_update.new_password)
         await self.user_repo.update(user)
+
+    async def refresh_access_token(self, refresh_token: str) -> str:
+        payload = decode_token(refresh_token)
+        if not payload or "user_id" not in payload:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="유효하지 않은 리프레시 토큰입니다.",
+            )
+
+        user_id = payload.get("user_id")
+        user = await self.user_repo.get_by_id(user_id)  # type: ignore
+        if not user:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="유효하지 않은 리프레시 토큰입니다.",
+            )
+
+        return create_access_token(data={"user_id": user.id})
