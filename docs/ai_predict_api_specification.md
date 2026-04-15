@@ -1,6 +1,6 @@
 # AI 폐렴 예측 API 명세서
 
-본 문서는 사내 의료인, 개발팀, 어드민 유저를 위한 AI 폐렴 예측 및 결과 조회 API 명세서입니다.
+본 문서는 사내 의료인, 개발팀, 연구진 유저를 위한 AI 폐렴 예측 및 결과 조회 API 명세서입니다.
 
 ## 1. AI 폐렴 예측 수행
 
@@ -9,7 +9,7 @@
 - **URL:** `/api/v1/medical-records/{record_id}/predict`
 - **Method:** `POST`
 - **Auth Required:** YES (Bearer Token)
-- **Permissions:** Admin, Medical Team, Dev Team
+- **Permissions:** Research Team, Medical Team, Dev Team
 - **Path Parameters:**
     - `record_id` (integer): 진료기록 고유 ID
 
@@ -43,7 +43,7 @@
 - **URL:** `/api/v1/medical-records/{record_id}/analyses`
 - **Method:** `GET`
 - **Auth Required:** YES (Bearer Token)
-- **Permissions:** Admin, Medical Team, Dev Team
+- **Permissions:** Research Team, Medical Team, Dev Team
 - **Path Parameters:**
     - `record_id` (integer): 진료기록 고유 ID
 

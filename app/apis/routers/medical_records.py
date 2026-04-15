@@ -71,10 +71,7 @@ async def predict_pneumonia(
     ai_analysis_service: AIAnalysisService = Depends(get_ai_analysis_service),
     current_user: User = Depends(get_current_active_user),
 ):
-    # REQ-PRED-001: 사내 의료인, 개발팀, 어드민 역할을 가진 유저만 접근 가능
-    if current_user.role != UserRole.ADMIN and current_user.department not in ["medical team", "dev team"]:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="AI 분석 권한이 필요합니다.")
-
+    # REQ-PRED-001
     return await ai_analysis_service.predict_pneumonia(record_id)
 
 
@@ -84,8 +81,5 @@ async def get_medical_record_analyses(
     ai_analysis_service: AIAnalysisService = Depends(get_ai_analysis_service),
     current_user: User = Depends(get_current_active_user),
 ):
-    # REQ-PRED-002: 사내 의료인, 개발팀, 어드민 역할을 가진 유저만 접근 가능
-    if current_user.role != UserRole.ADMIN and current_user.department not in ["medical team", "dev team"]:
-        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="AI 분석 결과 조회 권한이 필요합니다.")
-
+    # REQ-PRED-002
     return await ai_analysis_service.get_ai_analyses_by_record(record_id)
