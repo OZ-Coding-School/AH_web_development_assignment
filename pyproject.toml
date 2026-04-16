@@ -19,6 +19,17 @@ dependencies = [
     "uuid6>=2025.0.1",
 ]
 
+# PyTorch CPU 버젼 설치를 위해 인덱스를 정의
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true  # 다른 패키지가 실수로 여기서 설치되는 것을 방지
+
+# 패키지 설치시 상기 인덱스를 사용하도록 강제
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+
 [tool.ruff]
 # 기본 라인 길이 설정
 line-length = 120
