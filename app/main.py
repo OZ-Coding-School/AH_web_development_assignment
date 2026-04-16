@@ -32,7 +32,3 @@ async def catch_all(path: str):
 
         raise HTTPException(status_code=404)
     return FileResponse(APP_DIR / "static" / "index.html")
-
-
-if __name__ == "__main__":
-    uvicorn.run(host="0.0.0.0", port=8001, app="main:app", reload=True)
