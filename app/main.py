@@ -1,17 +1,16 @@
 from pathlib import Path
 
 from fastapi import FastAPI
-import uvicorn
 from starlette.staticfiles import StaticFiles
 from starlette.responses import FileResponse
 
 app = FastAPI()
 
-APP_DIR = Path(__file__).resolve().parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 # 'static' 폴더를 '/static' 경로로 마운트 (CSS, JS 파일 서빙용)
-app.mount("/static", StaticFiles(directory=APP_DIR / "static"), name="static")
+app.mount("/static", StaticFiles(directory=BASE_DIR / "static"), name="static")
 # 'media' 폴더를 '/media' 경로로 마운트 (사용자 업로드 파일 서빙용)
-app.mount("/media", StaticFiles(directory=APP_DIR / "media"), name="media")
+app.mount("/media", StaticFiles(directory=BASE_DIR / "media"), name="media")
 
 
 @app.get(path="/healthcheck", status_code=200, include_in_schema=False)
@@ -21,7 +20,7 @@ async def healthcheck():
 
 @app.get("/", include_in_schema=False)
 async def index():
-    return FileResponse(APP_DIR / "static" / "index.html")
+    return FileResponse(BASE_DIR / "static" / "index.html")
 
 
 @app.get("/{path:path}", include_in_schema=False)
@@ -31,4 +30,4 @@ async def catch_all(path: str):
         from fastapi import HTTPException
 
         raise HTTPException(status_code=404)
-    return FileResponse(APP_DIR / "static" / "index.html")
+    return FileResponse(BASE_DIR / "static" / "index.html")
