@@ -10,6 +10,8 @@ import logging
 # 로거 설정
 logger = logging.getLogger(__name__)
 
+MODEL_PATHS = {"pneumonia_model_v1": "worker/models/pneumonia_model.pth"}
+
 
 class SimpleCNN(nn.Module):
     def __init__(self) -> None:
@@ -29,9 +31,9 @@ class SimpleCNN(nn.Module):
 
 
 class PneumoniaPredictModel:
-    def __init__(self, model_path) -> None:
+    def __init__(self, model_name: str) -> None:
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.model_path = model_path
+        self.model_path = MODEL_PATHS.get(model_name, "worker/models/pneumonia_model.pth")
         self.model: Optional[nn.Module] = None
         self.transform = transforms.Compose(
             [transforms.Grayscale(), transforms.Resize((128, 128)), transforms.ToTensor()]
