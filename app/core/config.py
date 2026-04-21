@@ -18,6 +18,10 @@ class Settings(BaseSettings):
     BASE_DIR: Path = Path(__file__).resolve().parent.parent.parent
     MEDIA_DIR: Path = BASE_DIR / "media"
     PREDICT_MODEL: str = "pneumonia_model_v1"
+
+    REDIS_HOST: str = "localhost"
+    REDIS_PORT: int = 6379
+
     model_config = {"env_file": ".env", "extra": "ignore"}
 
 

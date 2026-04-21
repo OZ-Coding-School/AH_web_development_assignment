@@ -28,6 +28,10 @@ envs/
 *.env
 .env*
 
+# ai models
+# 모델은 볼륨 마운트를 통해 사용, 이미지 경량화 목적.
+*models/
+
 # ETC
 .python-version
 README.md

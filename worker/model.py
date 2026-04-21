@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Optional, Self
 
 import torch
 from torchvision import transforms  # type: ignore
@@ -39,12 +39,13 @@ class PneumoniaPredictModel:
             [transforms.Grayscale(), transforms.Resize((128, 128)), transforms.ToTensor()]
         )
 
-    def load(self) -> None:
+    def load(self) -> Self:
         logger.info(f"Loading pneumonia prediction model on {self.device}...")
         self.model = SimpleCNN().to(self.device)
         self.model.load_state_dict(torch.load(self.model_path, map_location=self.device))
         self.model.eval()
         logger.info("Pneumonia prediction model loaded successfully.")
+        return self
 
     def predict(self, img_path: str) -> dict[str, Any]:
         # 모델이 로드되어 있지 않으면 런타임 에러 발생
