@@ -113,9 +113,7 @@ async def get_user_detail(user_id: int) -> UserResponse:
 
 
 @practice_router.patch("/{user_id}", status_code=200)
-async def partial_update_user(
-    user_id: int, user_info: UserUpdateRequest
-) -> UserResponse:
+async def partial_update_user(user_id: int, user_info: UserUpdateRequest) -> UserResponse:
     # 유저리스트에서 해당 user_id의 유저 정보가 존재하는지 확인
     user = next((user for user in user_list if user["id"] == user_id), None)
     # 유저가 존재하지 않으면
@@ -126,15 +124,11 @@ async def partial_update_user(
     # 업데이트 데이터가 없으면
     if not user_data:
         # 400 Bad Request 응답으로 반환
-        raise HTTPException(
-            status_code=400, detail="At least one field must be provided for update."
-        )
+        raise HTTPException(status_code=400, detail="At least one field must be provided for update.")
     # 업데이트 데이터에 이메일이 존재하면
     if "email" in user_data:
         # 유저 리스트에서 중복 여부 검사
-        if any(
-            u["email"] == user_data["email"] and u["id"] != user_id for u in user_list
-        ):
+        if any(u["email"] == user_data["email"] and u["id"] != user_id for u in user_list):
             # 중복이면 409 Conflict 응답으로 반환
             raise HTTPException(status_code=409, detail="Email already exists.")
     user.update(user_data)
