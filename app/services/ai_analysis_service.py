@@ -46,8 +46,9 @@ class AIAnalysisService:
 
         xray_image = record.xray_images[0]
         # 실제 이미지 경로로 변환
-        # /media/xray-images/... -> app/media/xray-images/...
-        file_path = os.path.join("app", xray_image.image_url.lstrip("/"))
+        # settings.MEDIA_DIR (/app/media) + xray-images/filename
+        filename = os.path.basename(xray_image.image_url)
+        file_path = os.path.join(settings.MEDIA_DIR, "xray-images", filename)
 
         if not os.path.exists(file_path):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="이미지 파일을 찾을 수 없습니다.")
