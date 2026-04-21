@@ -22,6 +22,21 @@ services:
       retries: 3
     depends_on:
       - mysql
+      - redis
+
+  ai-worker:
+    container_name: ai-worker
+    build:
+      context: .
+      dockerfile: worker/Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./media:/app/media:ro
+      # 모델은 마운트하여 이미지 경량화
+      - ./worker/models:/app/worker/models:ro
+    depends_on:
+      - redis
 
   mysql:
     container_name: mysql
@@ -40,6 +55,17 @@ services:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
       retries: 5
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
 
 
 volumes:
