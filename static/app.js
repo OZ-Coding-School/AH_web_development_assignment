@@ -19,6 +19,7 @@ async function login(email, password) {
         if (data) {
             state.token = data.access_token;
             localStorage.setItem('token', state.token);
+            localStorage.setItem('isLoggedIn', 'true');
             await checkAuth();
             
             if (state.user && state.user.role === 'pending') {
@@ -43,6 +44,7 @@ async function logout(event) {
             state.token = null;
             state.user = null;
             localStorage.removeItem('token');
+            localStorage.removeItem('isLoggedIn');
             updateNav();
             await navigate('/login');
         }
@@ -52,14 +54,15 @@ async function logout(event) {
         state.token = null;
         state.user = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('isLoggedIn');
         updateNav();
         navigate('/login');
     }
 }
 
 async function checkAuth() {
-    if (!state.token) {
-        // 토큰은 없지만 쿠키(리프레시 토큰)가 있을 수 있으므로 리프레시 시도
+    if (!state.token && localStorage.getItem('isLoggedIn') === 'true') {
+        // 토큰은 없지만 로그인 상태 기록이 있으므로 리프레시 시도
         try {
             const refreshResponse = await apis.refresh();
             if (refreshResponse.ok) {
@@ -67,12 +70,16 @@ async function checkAuth() {
                 state.token = data.access_token;
                 localStorage.setItem('token', state.token);
             } else {
+                // 리프레시 실패 시 로그인 상태 해제
+                localStorage.removeItem('isLoggedIn');
                 return;
             }
         } catch (err) {
             return;
         }
     }
+    
+    if (!state.token) return;
     
     try {
         state.user = await apis.getMe();
