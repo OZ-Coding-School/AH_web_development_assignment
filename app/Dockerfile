@@ -19,9 +19,8 @@ COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 # 의존성 패지키 관리 파일 복사
 COPY pyproject.toml uv.lock ./
 
-# uv 가상환경에 의존성 패키지를 설치
-# --frozen 옵션을 사용하여 uv.lock 파일에 기록된 버젼 설치
-RUN uv sync --frozen
+# uv 가상환경에 app 의존성 패키지를 설치
+RUN uv sync --group app
 
 # 앱 복사
 COPY app ./app
