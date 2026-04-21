@@ -36,7 +36,7 @@ const apis = {
                 
                 // 토큰이 없는 경우 리프레시 시도 없이 로그아웃
                 if (!state.token) {
-                    logout();
+                    await logout();
                     return null;
                 }
 
@@ -71,12 +71,12 @@ const apis = {
                     } else {
                         // 리프레시 실패 시 로그아웃
                         this.isRefreshing = false;
-                        logout();
+                        await logout();
                         return null;
                     }
                 } catch (refreshErr) {
                     this.isRefreshing = false;
-                    logout();
+                    await logout();
                     return null;
                 }
             }

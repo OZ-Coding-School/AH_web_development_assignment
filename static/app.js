@@ -35,7 +35,14 @@ async function login(email, password) {
     }
 }
 
-function logout() {
+async function logout() {
+    try {
+        if (typeof apis !== 'undefined' && apis.logout) {
+            await apis.logout();
+        }
+    } catch (err) {
+        console.error('Logout failed:', err);
+    }
     state.token = null;
     state.user = null;
     localStorage.removeItem('token');
