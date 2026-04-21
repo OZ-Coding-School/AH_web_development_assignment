@@ -61,8 +61,12 @@ async def refresh_token(
 
 
 @router.post("/logout", response_model=Message)
-async def logout(response: Response, current_user: User = Depends(get_current_user)):
-    response.delete_cookie(key="refresh_token")
+async def logout(response: Response):
+    response.delete_cookie(
+        key="refresh_token",
+        httponly=True,
+        samesite="strict",
+    )
     return {"message": "성공적으로 로그아웃되었습니다."}
 
 
