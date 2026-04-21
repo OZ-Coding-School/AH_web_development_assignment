@@ -35,19 +35,26 @@ async function login(email, password) {
     }
 }
 
-async function logout() {
+async function logout(event) {
+    if (event) event.preventDefault();
     try {
         if (typeof apis !== 'undefined' && apis.logout) {
             await apis.logout();
+            state.token = null;
+            state.user = null;
+            localStorage.removeItem('token');
+            updateNav();
+            await navigate('/login');
         }
     } catch (err) {
         console.error('Logout failed:', err);
+        // 에러가 발생하더라도 클라이언트 측 세션은 정리하고 로그인 페이지로 이동
+        state.token = null;
+        state.user = null;
+        localStorage.removeItem('token');
+        updateNav();
+        navigate('/login');
     }
-    state.token = null;
-    state.user = null;
-    localStorage.removeItem('token');
-    updateNav();
-    navigate('/');
 }
 
 async function checkAuth() {
@@ -90,7 +97,7 @@ function updateNav() {
         
         authLink.innerHTML = `
             <span class="user-info" onclick="navigate('/my-page')" style="cursor: pointer;">${state.user.name}(${state.user.department})</span>
-            <a href="#" onclick="logout()" class="nav-btn logout-btn">로그아웃</a>
+            <a href="#" onclick="logout(event)" class="nav-btn logout-btn">로그아웃</a>
         `;
     } else {
         document.body.classList.remove('logged-in');
@@ -119,11 +126,22 @@ async function navigate(path, pushState = true) {
     app.innerHTML = '<div class="card">로딩 중...</div>';
 
     try {
-        // PENDING 유저 접근 제한
-        const publicPaths = ['/', '/home', '/login', '/signup', '/my-page'];
+        // 권한 체크
+        const publicPaths = ['/', '/home', '/login', '/signup'];
+        if (!state.user && !publicPaths.includes(pathname)) {
+            await navigate('/login');
+            return;
+        }
+
         if (state.user && state.user.role === 'pending' && !publicPaths.includes(pathname)) {
             utils.showAlert('승인 대기 중인 사용자입니다. 관리자의 승인 이후에 사용가능합니다.', 'error', '접근 제한');
-            navigate('/');
+            await navigate('/');
+            return;
+        }
+
+        if (pathname === '/admin/users' && state.user?.role !== 'admin') {
+            utils.showAlert('관리자 권한이 필요합니다.', 'error', '접근 제한');
+            await navigate('/');
             return;
         }
 

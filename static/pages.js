@@ -5,6 +5,7 @@
 const pages = {
     async renderHome() {
         const html = await utils.loadTemplate('home');
+        if (state.currentPage !== '/' && state.currentPage !== '/home') return;
         const app = document.getElementById('app');
         app.innerHTML = html;
         
@@ -36,6 +37,7 @@ const pages = {
     async renderPatients(params = {}) {
         const patients = await apis.getPatients(params);
         const html = await utils.loadTemplate('patients');
+        if (state.currentPage !== '/patients') return;
         const app = document.getElementById('app');
         app.innerHTML = html;
 
@@ -81,6 +83,7 @@ const pages = {
         const patient = await apis.getPatient(patientId);
         const records = await apis.getPatientMedicalRecords(patientId);
         const html = await utils.loadTemplate('patient-detail');
+        if (!state.currentPage.startsWith('/patients/')) return;
         const app = document.getElementById('app');
         app.innerHTML = html;
         
@@ -216,6 +219,7 @@ const pages = {
     async renderAdminUsers(params = {}) {
         const users = await apis.adminGetUsers(params);
         const html = await utils.loadTemplate('admin-users');
+        if (state.currentPage !== '/admin/users') return;
         const app = document.getElementById('app');
         app.innerHTML = html;
 
