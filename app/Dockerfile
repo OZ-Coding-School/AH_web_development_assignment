@@ -24,7 +24,13 @@ COPY pyproject.toml uv.lock ./
 RUN uv sync --frozen
 
 # 앱 복사
-COPY . .
+COPY app ./app
+# Alembic 마이그레이션 관리 디렉터리 복사
+COPY alembic ./alembic
+# Alembic 설정 파일 복사
+COPY alembic.ini ./
+# static files 복사
+COPY static ./static
 
 # 실행
 CMD ["uv", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--workers", "3"]
