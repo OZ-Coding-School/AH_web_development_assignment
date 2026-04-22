@@ -11,8 +11,8 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app/app
-      - ./static:/app/static
-      - ./media:/app/media
+      - static_volume:/app/static
+      - media_volume:/app/media
     healthcheck:
       test: ["CMD-SHELL", "curl -f http://localhost:8000/healthcheck || exit 1"]
       interval: 5s
@@ -42,3 +42,5 @@ services:
 
 volumes:
   mysql_volume:
+  static_volume:
+  media_volume:
