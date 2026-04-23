@@ -1,11 +1,17 @@
 services:
   fastapi:
     container_name: fastapi
+    # 환경변수에 이미지 태그를 저장하여 가져오기
+    image: ${DOCKER_WEB_IMAGE}
     env_file:
       - .env
     build:
       context: .
       dockerfile: app/Dockerfile
+      # 멀티 플랫폼 이미지 구축(로컬 - arm64, 배포 - amd64)
+      platforms:
+        - linux/amd64
+        - linux/arm64
     # 이미지 실행 명령어
     # Alembic 마이그레이션 및 uvicorn 실행
     entrypoint: sh -c "uv run alembic upgrade head && uv run uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
@@ -26,9 +32,15 @@ services:
 
   ai-worker:
     container_name: ai-worker
+    # 환경변수에 이미지 태그를 저장하여 가져오기
+    image: ${DOCKER_AI_WORKER_IMAGE}
     build:
       context: .
       dockerfile: worker/Dockerfile
+      # 멀티 플랫폼 이미지 구축(로컬 - arm64, 배포 - amd64)
+      platforms:
+        - linux/amd64
+        - linux/arm64
     env_file:
       - .env
     volumes:
